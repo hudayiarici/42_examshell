@@ -12,7 +12,7 @@ fi
 
 # Compile the program
 echo "${BLUE}Compiling filter program...${RESET}"
-gcc -Wall -Werror -Wextra -o filter_test "$rendu_dir/$expected_file" 2>/dev/null
+gcc -Wall -Werror -Wextra -o filter_test "$rendu_dir/$expected_file"
 if [ $? -ne 0 ]; then
     echo "$(tput setaf 1)$(tput bold)FAIL: Compilation error$(tput sgr 0)"
     exit 1

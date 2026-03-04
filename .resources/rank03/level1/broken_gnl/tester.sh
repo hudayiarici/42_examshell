@@ -64,7 +64,7 @@ EOF
 
 # Test 1: Basic functionality
 echo "${BLUE}Testing basic functionality...${RESET}"
-gcc -Wall -Werror -Wextra -D BUFFER_SIZE=42 -o test_gnl test_main.c $rendu_dir/get_next_line.c 2>/dev/null
+gcc -Wall -Werror -Wextra -D BUFFER_SIZE=42 -o test_gnl test_main.c $rendu_dir/get_next_line.c
 if [ $? -ne 0 ]; then
     echo "$(tput setaf 1)$(tput bold)FAIL: Compilation error$(tput sgr 0)"
     rm -f test*.txt empty.txt test_main.c
