@@ -1,4 +1,6 @@
 #include "get_next_line.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 char *ft_strchr(char *s, int c)
 {
