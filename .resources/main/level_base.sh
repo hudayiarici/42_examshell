@@ -22,7 +22,7 @@ if [[ "$rank" == "rank02" ]]; then
     fi
 elif [[ "$rank" == "rank03" ]]; then
     if [[ "$level" == *"level1"* ]]; then
-        qsub=(broken_gnl filter scanf)
+        qsub=(broken_gnl filter)
     elif [[ "$level" == *"level2"* ]]; then
         qsub=(n_queens permutations powerset rip tsp)
     else
@@ -70,8 +70,13 @@ while true; do
 
    # Copy question files if needed
 if [[ "$rank" == "rank03" && "$level" == *"level1"* ]]; then
-    if [ -f "broken_gnl.c" ]; then
-        cp "broken_gnl.c" "$base_dir/../../rendu/${shuffled[$i]}/broken_gnl.c"
+    if [[ "${shuffled[$i]}" == "broken_gnl" ]]; then
+        [ ! -f "$base_dir/../../rendu/${shuffled[$i]}/get_next_line.c" ] && \
+            cp "broken_gnl.c" "$base_dir/../../rendu/${shuffled[$i]}/get_next_line.c"
+        [ ! -f "$base_dir/../../rendu/${shuffled[$i]}/get_next_line.h" ] && \
+            cp "get_next_line.h" "$base_dir/../../rendu/${shuffled[$i]}/get_next_line.h"
+    else
+        touch "$base_dir/../../rendu/${shuffled[$i]}/${shuffled[$i]}.c"
     fi
 elif [[ "$rank" == "rank04" && "$level" == *"level2"* ]]; then
     if [ -f "given.c" ]; then
@@ -101,13 +106,29 @@ fi
         clear
         echo -e "${WHITE}$subject${RESET}"
         echo
-        echo "Please type 'test' to test code, 'next' for next or 'exit' for exit."
+        echo "Please type 'test' to test code, 'solution' to see the answer, 'next' for next or 'exit' for exit."
         echo
         read -rp "/>" input
         case $input in
             next)
                 i=$((i+1))
                 break
+                ;;
+            solution)
+                echo -e "${GREEN}--- Correct Solution for ${shuffled[$i]} ---${RESET}"
+                case ${shuffled[$i]} in
+                    "broken_gnl")
+                        cat "$base_dir/../$rank/$level/${shuffled[$i]}/get_next_line.c"
+                        ;;
+                    "filter")
+                        cat "$base_dir/../$rank/$level/${shuffled[$i]}/filter.c"
+                        ;;
+                    *)
+                        echo -e "${YELLOW}No specific solution file found for ${shuffled[$i]}.${RESET}"
+                        ;;
+                esac
+                echo -e "${GREEN}-------------------------------------${RESET}"
+                read -rp "${GREEN}${BOLD}Please press enter to continue your practice.${RESET}" enter
                 ;;
             test)
                 clear

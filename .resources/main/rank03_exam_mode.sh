@@ -14,7 +14,7 @@ subject_file="/tmp/.current_subject_${rank}_${level}"
 get_subjects() {
     case "$level" in
         level1)
-            echo "broken_gnl filter scanf"
+            echo "broken_gnl filter"
             ;;
         level2)
             echo "n_queens permutations powerset rip tsp"
@@ -40,16 +40,13 @@ prepare_subject() {
     # Create appropriate files based on subject requirements
     case $chosen in
         "broken_gnl")
-            [ ! -f "$base_dir/../../rendu/$chosen/broken_gnl.c" ] && \
-                cp "$base_dir/../$rank/$level/broken_gnl/broken_gnl.c" "$base_dir/../../rendu/$chosen/broken_gnl.c"
-            touch "$base_dir/../../rendu/$chosen/get_next_line.c"
-            touch "$base_dir/../../rendu/$chosen/get_next_line.h"
+            [ ! -f "$base_dir/../../rendu/$chosen/get_next_line.c" ] && \
+                cp "$base_dir/../$rank/$level/broken_gnl/broken_gnl.c" "$base_dir/../../rendu/$chosen/get_next_line.c"
+            [ ! -f "$base_dir/../../rendu/$chosen/get_next_line.h" ] && \
+                cp "$base_dir/../$rank/$level/broken_gnl/get_next_line.h" "$base_dir/../../rendu/$chosen/get_next_line.h"
             ;;
         "filter")
             touch "$base_dir/../../rendu/$chosen/filter.c"
-            ;;
-        "scanf")
-            touch "$base_dir/../../rendu/$chosen/ft_scanf.c"
             ;;
         *)
             # For other subjects, create generic .c file
@@ -68,7 +65,7 @@ prepare_subject() {
     cat sub.txt
     echo
     echo -e "=================================================="
-    echo -e "${YELLOW}Type 'test' to test your code, 'next' to get a new question, or 'exit' to quit.${RESET}"
+    echo -e "${YELLOW}Type 'test' to test your code, 'solution' to see the answer, 'next' to get a new question, or 'exit' to quit.${RESET}"
 }
 
 # Initial subject selection
@@ -97,6 +94,21 @@ while true; do
             else
                 echo -e "${YELLOW}No tester available for this subject. Please test manually.${RESET}"
             fi
+            ;;
+        solution)
+            echo -e "${GREEN}--- Correct Solution for $chosen ---${RESET}"
+            case $chosen in
+                "broken_gnl")
+                    cat "$base_dir/../$rank/$level/$chosen/get_next_line.c"
+                    ;;
+                "filter")
+                    cat "$base_dir/../$rank/$level/$chosen/filter.c"
+                    ;;
+                *)
+                    echo -e "${YELLOW}No specific solution file found for $chosen.${RESET}"
+                    ;;
+            esac
+            echo -e "${GREEN}-------------------------------------${RESET}"
             ;;
         next)
             pick_new_subject
