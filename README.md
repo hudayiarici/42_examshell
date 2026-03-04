@@ -13,6 +13,7 @@ This project provides a comprehensive practice shell for 42 School examinations,
 - **Practice Environment**: Dedicated workspace (`rendu` folder) for submissions
 - **Command Practice**: Built-in command reference and practice
 - **Easy Navigation**: Simple numbered menu system
+- **Quick Solutions**: View correct solutions directly with the 'solution' command during practice
 
 ## 📁 Project Structure
 
@@ -71,7 +72,8 @@ The main menu provides the following options:
 
 The shell automatically creates a `rendu` folder where you can:
 - Write your solutions
-- Test your code
+- Test your code using the `test` command
+- View reference answers using the `solution` command
 - Practice exam submissions
 
 ## 🎯 Target Audience
