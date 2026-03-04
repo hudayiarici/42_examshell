@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 EOF
 
 # Test 1: Basic functionality
-echo "${BLUE}Testing basic functionality...${RESET}"
+echo "${BLUE}Testing basic functionality (3s timeout)...${RESET}"
 gcc -Wall -Werror -Wextra -D BUFFER_SIZE=42 -o test_gnl test_main.c $rendu_dir/get_next_line.c
 if [ $? -ne 0 ]; then
     echo "$(tput setaf 1)$(tput bold)FAIL: Compilation error$(tput sgr 0)"
@@ -71,7 +71,12 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-./test_gnl test1.txt > output1.txt 2>/dev/null
+timeout 3s ./test_gnl test1.txt > output1.txt 2>/dev/null
+if [ $? -eq 124 ]; then
+    echo "$(tput setaf 1)$(tput bold)FAIL: Timeout (possible infinite loop)$(tput sgr 0)"
+    rm -f test*.txt empty.txt test_main.c test_gnl output*.txt
+    exit 1
+fi
 expected_lines=$(wc -l < test1.txt)
 if ! grep -q "Total lines read: $expected_lines" output1.txt; then
     echo "$(tput setaf 1)$(tput bold)FAIL: Wrong number of lines read$(tput sgr 0)"
@@ -81,8 +86,13 @@ if ! grep -q "Total lines read: $expected_lines" output1.txt; then
 fi
 
 # Test 2: Single line file
-echo "${BLUE}Testing single line...${RESET}"
-./test_gnl test2.txt > output2.txt 2>/dev/null
+echo "${BLUE}Testing single line (3s timeout)...${RESET}"
+timeout 3s ./test_gnl test2.txt > output2.txt 2>/dev/null
+if [ $? -eq 124 ]; then
+    echo "$(tput setaf 1)$(tput bold)FAIL: Timeout (possible infinite loop)$(tput sgr 0)"
+    rm -f test*.txt empty.txt test_main.c test_gnl output*.txt
+    exit 1
+fi
 if ! grep -q "Total lines read: 1" output2.txt; then
     echo "$(tput setaf 1)$(tput bold)FAIL: Single line test failed$(tput sgr 0)"
     rm -f test*.txt empty.txt test_main.c test_gnl output*.txt

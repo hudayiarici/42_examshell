@@ -88,11 +88,25 @@ while true; do
     case $command in
         test)
             if [ -f "tester.sh" ]; then
-                echo -e "${BLUE}Running tester...${RESET}"
-                bash tester.sh
-                echo -e "${CYAN}Test completed. Continue working or type 'next' for a new subject.${RESET}"
+                echo -e "${BLUE}Running tester (Max 10s)...${RESET}"
+                bash tester.sh &
+                test_pid=$!
+                counter=0
+                while [ $counter -lt 10 ] && kill -0 $test_pid 2>/dev/null; do
+                    sleep 1
+                    ((counter++))
+                done
+
+                if kill -0 $test_pid 2>/dev/null; then
+                    echo -e "${RED}${BOLD}TIMEOUT!${RESET} Your code might have an infinite loop."
+                    kill -9 $test_pid 2>/dev/null
+                    # Kill child processes (the compiled program)
+                    pkill -P $test_pid 2>/dev/null
+                else
+                    echo -e "${CYAN}Test completed.${RESET}"
+                fi
             else
-                echo -e "${YELLOW}No tester available for this subject. Please test manually.${RESET}"
+                echo -e "${YELLOW}No tester available for this subject.${RESET}"
             fi
             ;;
         solution)
