@@ -35,8 +35,7 @@ void solve(int subsize, int current_index, int *subset)
 	if (current_index == size)
 	{
 		// if the actual sum of subset meets the requirement
-		// and the subset is not an empty set
-		if (calcul_subset_sum(subsize, subset) == required_sum && subsize != 0)
+		if (calcul_subset_sum(subsize, subset) == required_sum)
 			print_subset(subsize, subset);
 		return ;
 	}
