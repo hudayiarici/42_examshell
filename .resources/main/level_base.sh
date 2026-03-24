@@ -78,6 +78,13 @@ if [[ "$rank" == "rank03" && "$level" == *"level1"* ]]; then
     else
         touch "$base_dir/../../rendu/${shuffled[$i]}/${shuffled[$i]}.c"
     fi
+elif [[ "$rank" == "rank03" && "$level" == *"level2"* ]]; then
+    if [[ "${shuffled[$i]}" == "tsp" ]]; then
+        [ ! -f "$base_dir/../../rendu/${shuffled[$i]}/tsp.c" ] && \
+            cp "tsp.c" "$base_dir/../../rendu/${shuffled[$i]}/tsp.c"
+    else
+        touch "$base_dir/../../rendu/${shuffled[$i]}/${shuffled[$i]}.c"
+    fi
 elif [[ "$rank" == "rank04" && "$level" == *"level2"* ]]; then
     if [ -f "given.c" ]; then
         cp "given.c" "$base_dir/../../rendu/${shuffled[$i]}/given.c"
@@ -122,6 +129,12 @@ fi
                         ;;
                     "filter")
                         cat "$base_dir/../$rank/$level/${shuffled[$i]}/filter.c"
+                        ;;
+                    "n_queens" | "permutations" | "powerset" | "rip")
+                        cat "$base_dir/../$rank/$level/${shuffled[$i]}/${shuffled[$i]}.c"
+                        ;;
+                    "tsp")
+                        cat "$base_dir/../$rank/$level/${shuffled[$i]}/solution.c"
                         ;;
                     *)
                         echo -e "${YELLOW}No specific solution file found for ${shuffled[$i]}.${RESET}"
