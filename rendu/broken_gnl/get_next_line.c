@@ -49,7 +49,7 @@ size_t ft_strlen(char *s)
 }
 
 /**
- * str_append_mem: Mevcut bir dizgenin (s1) sonuna belirli bir boyuttaki (size2) 
+ * str_append_mem: Mevcut bir dizgenin (s1) sonuna belirli bir boyuttaki (size2)
  * başka bir veriyi (s2) ekler. Belleği yeniden ayırır.
  */
 int str_append_mem(char **s1, char *s2, size_t size2)
@@ -110,10 +110,10 @@ char *get_next_line(int fd)
     if (!ret)
         return (NULL);
     ret[0] = 0;
-    
+
     // Mevcut tamponda satır sonu (\n) olup olmadığını kontrol et
     char *tmp = ft_strchr(b, '\n');
-    
+
     // Satır sonu bulana kadar okumaya devam et
     while (!tmp)
     {
@@ -123,7 +123,7 @@ char *get_next_line(int fd)
             free(ret);
             return NULL;
         }
-        
+
         // Yeni veri oku
         int read_ret = read(fd, b, BUFFER_SIZE);
         if (read_ret == -1) // Okuma hatası
@@ -142,16 +142,16 @@ char *get_next_line(int fd)
         b[read_ret] = 0; // Okunan veriyi sonlandır
         tmp = ft_strchr(b, '\n');
     }
-    
+
     // Satır sonu bulundu, o noktaya kadar olan kısmı sonuca ekle
     if (!str_append_mem(&ret, b, tmp - b  + 1))
     {
         free(ret);
         return (NULL);
     }
-    
+
     // Tamponun geri kalanını (bir sonraki satır için) başa taşı
     ft_memmove(b, tmp + 1, ft_strlen(tmp + 1) + 1);
-    
+
     return ret;
 }

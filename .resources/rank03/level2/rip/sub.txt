@@ -26,3 +26,14 @@ $> ./rip '(()(()(' | cat -e
 ( )( ) $
 ( ) () $
  ()( ) $
+
+--------------------------------------------------------------------------------
+[TURKISH SUBJECT]
+Sadece parantezlerden ('(' ve ')') oluşan bir dizgeyi argüman olarak alan bir program yazın.
+Eğer parantezler dengeli değilse (örneğin "())"), programınız ifadenin dengeli olması için
+gereken minimum sayıda parantezi kaldırmalıdır.
+"Kaldırmak" ifadesinden kasıt, o karakterin yerine boşluk (' ') koymaktır.
+Ardından tüm geçerli çözümleri yazdırmalısınız (birden fazla olabilir).
+
+Çözümlerin sırası önemli değildir.
+--------------------------------------------------------------------------------

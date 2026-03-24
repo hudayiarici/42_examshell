@@ -25,3 +25,20 @@ bac$
 bca$
 cab$
 cba$
+
+---------------------------------------------------------------
+[TURKISH SUBJECT]
+Argüman olarak verilen bir dizgenin (string) tüm permütasyonlarını yazdıran bir program yazın.
+
+Çözümler alfabetik sırada verilmelidir.
+
+Programınız, yinelenen karakterler içeren dizgelerle (örn: 'abccd') test edilmeyecektir.
+
+Örnek (abc için):
+abc
+acb
+bac
+bca
+cab
+cba
+---------------------------------------------------------------

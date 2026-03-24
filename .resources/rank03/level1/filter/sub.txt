@@ -1,7 +1,6 @@
 Assignment name: filter
 Expected files: filter.c
-Allowed functions: read, write, strlen, memmem, memmove, malloc, calloc,
-realloc, free, printf, fprintf, stdout, stderr, perror
+Allowed functions: read, write, strlen, memmem, memmove, malloc, calloc, realloc, free, printf, fprintf, stdout, stderr, perror
 --------------------------------------------------------------------------------
 
 Write a program that will take one and only one argument.
@@ -40,13 +39,29 @@ $> echo 'ababcabababc' | ./filter ababc | cat -e
 *****ab*****$
 $>
 
-NOTES:
-memmem includes:
-                #define _GNU_SOURCE
-			    #include <string.h>
+--------------------------------------------------------------------------------
+[TURKISH SUBJECT]
+Yalnızca bir (1) argüman alan bir program yazın.
 
-perror includes:
-                #include <errno.h>
+Programınız standart girdiden (stdin) okuma yapacak ve okunan tüm içeriği, 
+belirtilen s dizgesinin (argüman) her bir örneğini '*' karakterleriyle değiştirerek 
+standart çıktıya (stdout) yazacaktır (yıldız sayısı s dizgesinin uzunluğu kadar olmalıdır).
 
-read includes:
-                #include <fcntl.h>
+Programınız, özel bir okuma (read) fonksiyonu kullanılarak rastgele tampon (buffer) boyutlarıyla test edilecektir. 
+Bu nedenle, programınızdaki tampon her yeni çağrıda farklı sayıda karakterle doldurulacaktır.
+
+Örneğin:
+./filter bonjour
+komutu şununla aynı şekilde davranacaktır:
+sed 's/bonjour/*******/g'
+
+Programınız genel olarak bu dizindeki filter.sh kabuk betiği ile eşdeğer olmalıdır.
+
+Bir okuma veya malloc hatası durumunda, stderr'e "Error: " ve ardından hata mesajını yazmalı ve 1 döndürmelisiniz.
+
+Eğer program argümansız, boş bir argümanla veya birden fazla argümanla çağrılırsa 1 döndürmelidir.
+
+Örnek:
+$> echo 'ababcabababc' | ./filter ababc | cat -e
+*****ab*****$
+--------------------------------------------------------------------------------

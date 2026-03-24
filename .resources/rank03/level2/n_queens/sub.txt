@@ -1,9 +1,6 @@
-Assignement name : n_queens
-
-Expected files : *.c *.h
-
-Allowed functions : atoi, fprintf, write, calloc, malloc, free, realloc, stdout, stderr
-
+Assignment name  : n_queens
+Expected files   : *.c *.h
+Allowed functions: atoi, fprintf, write, calloc, malloc, free, realloc, stdout, stderr
 -------------------------------------------------------------------------
 
 Write a program that will print all the solutions to the n queens problem
@@ -12,8 +9,9 @@ We will not test with negative values.
 The order of the solutions is not important.
 
 You will display the solutions under the following format :
-<p1> <p2> <p3> ... \n
-where pn are the line index of the queen in each colum starting from 0.
+<p1> <p2> <p3> ... 
+
+where pn are the line index of the queen in each column starting from 0.
 
 For example this should work :
 $> ./n_queens 2 | cat -e
@@ -26,3 +24,18 @@ $> ./n_queens 7 | cat -e
 0 2 4 6 1 3 5$
 0 3 6 2 5 1 4$
 etc...
+
+-------------------------------------------------------------------------
+[TURKISH SUBJECT]
+Argüman olarak verilen n değeri için, n-vezir (n queens) probleminin tüm çözümlerini yazdıran bir program yazın.
+Negatif değerlerle test yapılmayacaktır.
+Çözümlerin sırası önemli değildir.
+
+Çözümleri şu formatta yazdıracaksınız:
+<p1> <p2> <p3> ... 
+
+Burada pn, 0'dan başlayarak her sütundaki vezirin satır (line) indeksidir.
+
+Örneğin (n=4 için):
+Sütun 0'daki vezir Satır 1'de, Sütun 1'deki Vezir Satır 3'te ise; sonuç "1 3 0 2" şeklinde görünür.
+-------------------------------------------------------------------------

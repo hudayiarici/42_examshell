@@ -46,3 +46,38 @@ of get_next_line.
 Finally, we consider that get_next_line has undefined behavior when reading
 from a binary file.
 --------------------------------------------------------------------------------
+[TURKISH SUBJECT]
+get_next_line.c dosyasındaki 'get_next_line' fonksiyonunu onarın (tamir edin).
+Fonksiyonun prototipi şu şekilde olmalıdır:
+char *get_next_line(int fd);
+
+Diğer yardımcı fonksiyonları da onarmanız gerekebilir.
+
+'get_next_line' Fonksiyonunun Açıklaması:
+
+Fonksiyonunuz, parametre olarak verilen dosya tanımlayıcıdan (file descriptor) okunan bir satırı döndürmelidir.
+
+'Okunan satır', '\n' (ASCII kodu 0x0a) veya Dosya Sonu (EOF) ile biten 0'dan n'ye kadar karakter dizisi olarak tanımlanır.
+
+Satırın sonunda '\n' varsa, döndürülen satıra bu '\n' karakteri de dahil edilmelidir.
+
+EOF'a ulaştığınızda, mevcut tamponu (buffer) bir char * içinde saklamalı ve döndürmelisiniz. Eğer tampon boşsa, NULL döndürmelisiniz.
+
+Bir hata durumunda NULL döndürün.
+
+Dönen işaretçi (pointer), NULL değilse free edilebilir (serbest bırakılabilir) olmalıdır.
+
+Programınız -D BUFFER_SIZE=xx bayrağı (flag) ile derlenecektir. Fonksiyonlarınızdaki okuma (read) çağrıları için bu BUFFER_SIZE kullanılmalıdır.
+
+Fonksiyonunuzda bellek sızıntısı (memory leak) olmamalıdır.
+
+EOF'a ulaştığınızda, fonksiyonunuz döndürülen satır hariç malloc ile ayrılmış hiçbir bellek tutmamalıdır.
+
+get_next_line fonksiyonunuzun bir döngü içinde çağrılması, metnin boyutundan veya satırlarının uzunluğundan bağımsız olarak, dosya sonuna kadar metni satır satır okumanıza olanak sağlamalıdır.
+
+Fonksiyonunuzun dosyadan, standart çıktıdan veya bir yönlendirmeden (redirection) okurken doğru davrandığından emin olun.
+
+get_next_line çağrıları arasında dosya tanımlayıcı üzerinde başka bir fonksiyon çağrısı yapılmayacağı varsayılır.
+
+Son olarak, ikili (binary) bir dosyadan okuma yaparken get_next_line'ın davranışının belirsiz olduğu kabul edilir.
+--------------------------------------------------------------------------------
