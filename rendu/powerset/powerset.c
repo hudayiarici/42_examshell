@@ -34,7 +34,7 @@ void solve(int subsize, int current_index, int *subset)
 	// Base case: if we've processed all numbers in the given set
 	if (current_index == size)
 	{
-		// if the actual sum of subset meets the requirement 
+		// if the actual sum of subset meets the requirement
 		// and the subset is not an empty set
 		if (calcul_subset_sum(subsize, subset) == required_sum && subsize != 0)
 			print_subset(subsize, subset);
@@ -47,7 +47,7 @@ void solve(int subsize, int current_index, int *subset)
 
 	// option 2: include current number
 	// add current number into the subset, increment subset size
-	subset[subsize] = nums[current_index]; 
+	subset[subsize] = nums[current_index];
 	solve(subsize + 1, current_index + 1, subset);
 }
 

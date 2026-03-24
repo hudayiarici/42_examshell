@@ -136,7 +136,7 @@ fi
 # We'll check if it's approximately correct (within 0.01)
 distance=$(echo "$output" | cut -d'.' -f1-2)
 expected_float=2.83
-actual_float=$(printf "%.2f" "$distance")
+actual_float=$(LC_NUMERIC=C printf "%.2f" "$distance")
 if [ "$actual_float" != "2.83" ]; then
     echo "$(tput setaf 1)$(tput bold)FAIL: Two points distance incorrect$(tput sgr 0)"
     echo "Expected approximately: 2.83"

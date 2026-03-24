@@ -113,13 +113,11 @@ void	print_perms(char **all_perms, int total_perms)
 // TO DO: NEEDS TO HANDLE MALLOC FAILURES AND FREE MEMORY
 int main(int ac, char **av)
 {
-	// error handling
-	if (ac != 2)
-	{
-		write(1, "\n", 1);
-		return 0;
-	}
-	char *s = av[1];
+	       // error handling
+	       if (ac != 2)
+	       {
+	               return 1;
+	       }	char *s = av[1];
 	int size = ft_strlen(s); // number of unique (alphabetic) characters in the string 
 	if (size == 0) 
 	{

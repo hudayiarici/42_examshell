@@ -59,6 +59,7 @@ int main(int argc, char **argv)
 	// error handling for incorrect argc
 	if (argc != 2)
 	{
+		write(1, "\n", 1);
 		return 1;
 	}
 	char *s = argv[1];
@@ -72,4 +73,3 @@ int main(int argc, char **argv)
 	solve(0, min_to_remove(s), 0, s);
 	return 0;
 }
-
