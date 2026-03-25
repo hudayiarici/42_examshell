@@ -5,71 +5,71 @@
 #include <string.h>
 #include <stdbool.h>
 #include <sys/types.h>
-#include <float.h> // add this library for FLT_MAX
-// Remember to compile with the -lm flag!
+#include <float.h> // FLT_MAX için bu kütüphaneyi ekleyin
+// -lm bayrağı ile derlemeyi unutmayın!
 
-/* This approach to solving the Traveling Salesman Problem 
-leverages a brute-force permutation generation strategy,
-which works quite well with a small size (N <= 11).
-The recursive backtracking function used here (generate_perms()) is structured similarly 
-to the one used in my solution to another Rank 03 exam question "permutations" 
-(also in my repo). I would recommend studying them side by side.
+/* Gezgin Satıcı Problemini çözmek için bu yaklaşım,
+küçük boyutlarda (N <= 11) oldukça iyi çalışan bir kaba kuvvet (brute-force)
+permütasyon üretme stratejisinden yararlanır.
+Burada kullanılan özyinelemeli geri izleme fonksiyonu (generate_perms()),
+başka bir Rank 03 sınav sorusu olan "permutations" (yine depomda mevcut) 
+çözümümde kullandığımla benzer bir yapıdadır. Bunları yan yana incelemenizi öneririm.
 
-You first initialize an array with city indices (0 to N-1). 
-Then, you use a recursive backtracking function (Heap's algorithm variant) 
-to systematically generate every possible ordering (permutation) of these city indices. 
-For each complete permutation, you calculate the total tour length 
-by summing the distances between consecutive cities and 
-adding the distance from the last city back to the first, 
-updating a best_distance variable if a shorter path is found.*/
+Önce şehir indislerini (0'dan N-1'e) içeren bir dizi ilklendirirsiniz.
+Ardından, bu şehir indislerinin mümkün olan her sıralamasını (permütasyonunu) 
+sistematik olarak üretmek için özyinelemeli bir geri izleme fonksiyonu 
+(Heap algoritması varyantı) kullanırsınız.
+Her tam permütasyon için, ardışık şehirler arasındaki mesafeleri toplayarak 
+ve son şehirden ilk şehre olan mesafeyi ekleyerek toplam tur uzunluğunu hesaplarsınız;
+daha kısa bir yol bulunursa best_distance değişkenini güncellersiniz. */
 
-// compute the distance between two points
+// iki nokta arasındaki mesafeyi hesapla
 float    distance(float a[2], float b[2])
 {
     return sqrtf((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1]));
 }
 
 
-/* YOUR FUNCTIONS START HERE */
+/* FONKSİYONLARINIZ BURADA BAŞLAR */
 
 
-// Calculates the total distance of a given path (permutation of city indices).
-// array: The main array of city coordinates.
-// perm: An array representing the order of city indices for the current path.
-// size: The total number of cities.
-// Returns the total distance as a float.
+// Verilen bir yolun (şehir indislerinin permütasyonu) toplam mesafesini hesaplar.
+// array: Şehir koordinatlarının ana dizisi.
+// perm: Mevcut yol için şehir indislerinin sırasını temsil eden bir dizi.
+// size: Toplam şehir sayısı.
+// Toplam mesafeyi float olarak döndürür.
 float calc_total_distance(float (*array)[2], int *perm, int size)
 {
 	int city_index_current;
 	int city_index_next;
 	int i;
 	float actual_distance = 0.0f;
-	// Sum distances between consecutive cities in the permutation.
+	// Permütasyondaki ardışık şehirler arasındaki mesafeleri topla.
 	for (i = 0; i < size - 1; i++)
 	{
 		city_index_current = perm[i];
 		city_index_next = perm[i + 1];
 		actual_distance += distance(array[city_index_current], array[city_index_next]);
 	}
-	// Add distance from the last city back to the first city to close the loop.
-	city_index_current = perm[i]; // i is now (size - 1) from the loop
-	city_index_next = perm[0]; // First city in the permutation
+	// Döngüyü kapatmak için son şehirden ilk şehre olan mesafeyi ekle.
+	city_index_current = perm[i]; // i şu an döngüden dolayı (size - 1) değerindedir
+	city_index_next = perm[0]; // Permütasyondaki ilk şehir
 	actual_distance += distance(array[city_index_current], array[city_index_next]);
 	return (actual_distance);
 }	
 
-// Main function: uses standard backtracking method to generate permutations
-// Generates all permutations of 'mutable_array' and calculates their path lengths.
-// array: The main array of city coordinates.
-// mutable_array: The array whose elements are being permuted (its content changes during recursion).
-// size: The number of elements in the array/permutation.
-// mutable_index_current: The starting index for the current permutation generation step (current depth).
-// best_distance: A pointer to a float variable that stores the minimum distance found so far.
+// Ana fonksiyon: permütasyon üretmek için standart geri izleme (backtracking) yöntemini kullanır
+// 'mutable_array'in tüm permütasyonlarını üretir ve yol uzunluklarını hesaplar.
+// array: Şehir koordinatlarının ana dizisi.
+// mutable_array: Elemanları permüte edilen dizi (içeriği özyineleme sırasında değişir).
+// size: Dizideki/permütasyondaki eleman sayısı.
+// mutable_index_current: Mevcut permütasyon üretme adımı için başlangıç indisi (mevcut derinlik).
+// best_distance: Şimdiye kadar bulunan minimum mesafeyi saklayan bir float değişkenine işaretçi.
 void generate_perms(float (*array)[2], int *mutable_array, int size,
 					int mutable_index_current, float *best_distance)
 {
-	// Base case: If mutable_index_current reaches size, 
-	// a complete permutation has been formed.
+	// Temel durum: Eğer mutable_index_current size'a ulaşırsa, 
+	// tam bir permütasyon oluşmuş demektir.
 	if (mutable_index_current == size)
 	{
 		float actual_distance = calc_total_distance(array, mutable_array, size);
@@ -77,75 +77,75 @@ void generate_perms(float (*array)[2], int *mutable_array, int size,
 			*best_distance = actual_distance;
 		return ;
 	}
-	// Recursive step: Iterate from mutable_index_current to size-1 
-	// to choose the element for current_index.
+	// Özyinelemeli adım: current_index için eleman seçmek üzere 
+	// mutable_index_current'tan size-1'e kadar dön.
 	for (int i = mutable_index_current; i < size; i++)
 	{
-		// Swap elements to create a new arrangement for the current level.
+		// Mevcut seviye için yeni bir düzenleme oluşturmak üzere elemanları takas et.
 		int temp = mutable_array[mutable_index_current];
 		mutable_array[mutable_index_current] = mutable_array[i];
 		mutable_array[i] = temp;
-		// Recurse to generate permutations for the rest of the array (next level)
+		// Dizinin geri kalanı için permütasyon üretmek üzere özyineleme yap (sonraki seviye)
 		generate_perms(array, mutable_array, size, mutable_index_current + 1,
 						best_distance);
-		// Backtrack: Swap back to restore the array to its state before the recursive call,
-        // allowing other permutations to be generated correctly for the current level.
+		// Geri İzleme: Diziyi özyinelemeli çağrıdan önceki durumuna döndürmek için tekrar takas et,
+        // böylece mevcut seviye için diğer permütasyonların doğru şekilde üretilmesini sağla.
 		temp = mutable_array[mutable_index_current];
 		mutable_array[mutable_index_current] = mutable_array[i];
 		mutable_array[i] = temp;
 	}
 }
 
-// Main function to solve the Traveling Salesman Problem.
-// (the skeleton function has been provided, you need to fill in the blanks.)
-// array: A pointer to an array of city coordinates ([x, y] pairs).
-// size: The number of cities in the array.
-// Returns the length of the shortest possible closed path visiting all cities.
+// Gezgin Satıcı Problemini çözmek için ana fonksiyon.
+// (iskelet fonksiyon sağlanmıştır, boşlukları doldurmanız gerekir.)
+// array: Şehir koordinatlarını içeren bir diziye işaretçi ([x, y] çiftleri).
+// size: Dizideki şehir sayısı.
+// Tüm şehirleri ziyaret eden mümkün olan en kısa kapalı yolun uzunluğunu döndürür.
 float tsp(float (*array)[2], ssize_t size)
 {
     float best_distance;
     
 	
-	// ... YOUR CODE STARTS HERE 
+	// ... KODUNUZ BURADA BAŞLAR 
 
 
-	best_distance = FLT_MAX; // initialise best distance to a very large number 
+	best_distance = FLT_MAX; // en iyi mesafeyi çok büyük bir sayıya ilklendir 
 	
-	 // Handle edge cases for 0 or 1 city: the path length is 0.
+	 // 0 veya 1 şehir için uç durumları yönet: yol uzunluğu 0'dır.
     if (size <= 1) {
         return 0.0f;
     }
-	// Create an integer array ranging from 0 to size - 1.
-    // This array will hold the indices of cities and will be permuted.
+	// 0'dan size - 1'e kadar uzanan bir tam sayı dizisi oluştur.
+    // Bu dizi şehirlerin indislerini tutacak ve permüte edilecektir.
 	int *mutable_array = malloc(sizeof(int) * size);
 	if (!mutable_array)
-		return FLT_MAX; // return a very large number to signify error
+		return FLT_MAX; // hata belirtmek için çok büyük bir sayı döndür
 	
 	for (int i = 0; i < size; i++)
 		mutable_array[i] = i;
 
-	// Generate permutations and find the best distance.
-    // Optimization: Start generating permutations from index 1 (mutable_index_current = 1)
-    // while implicitly fixing the city at index 0 in mutable_array[0].
-    // This reduces the number of permutations from N! to (N-1)! for a closed loop.
+	// Permütasyonları üret ve en iyi mesafeyi bul.
+    // Optimizasyon: Permütasyon üretmeye 1. indisten başlayın (mutable_index_current = 1)
+    // ve mutable_array[0]'daki şehri sabit tutun.
+    // Bu, kapalı bir döngü için permütasyon sayısını N!'den (N-1)!'e düşürür.
 	int mutable_index_start = 1;
 	generate_perms(array, mutable_array, size, mutable_index_start, &best_distance);
 	free(mutable_array);
 
 
-	// ... YOUR CODE ENDS 
+	// ... KODUNUZ BİTER 
 
 
     return (best_distance);
 }
 
 
-/* YOUR FUNCTIONS END HERE */
+/* FONKSİYONLARINIZ BURADA BİTER */
 
 
-// Function to determine the number of lines (cities) in a file.
-// file: A pointer to the FILE stream.
-// Returns the number of lines, or -1 on error.
+// Bir dosyadaki satır (şehir) sayısını belirleyen fonksiyon.
+// file: FILE akışına bir işaretçi.
+// Satır sayısını döndürür veya hata durumunda -1 döndürür.
 ssize_t    file_size(FILE *file)
 {
     char    *buffer = NULL;
@@ -153,33 +153,33 @@ ssize_t    file_size(FILE *file)
     ssize_t ret;
 
     errno = 0;
-	// Read lines one by one to count them.
+	// Satırları saymak için tek tek oku.
     for (ret = 0; getline(&buffer, &n, file) != -1; ret++);
 
-    free(buffer); // Free the buffer allocated by getline
+    free(buffer); // getline tarafından ayrılan belleği serbest bırak
     if (errno || fseek(file, 0, SEEK_SET))
         return -1;
     return ret;
 }
 
-// Function to read city coordinates from a file into an array.
-// array: A pointer to an array of float[2] where coordinates will be stored.
-// 		It is a 2D array where each "row" has exactly 2 columns 
-// 		(e.g., float coordinates[N][2]). 
-// 		Each float[2] represents a single city's [x, y] coordinates.
-// file: A pointer to the FILE stream to read from.
-// Returns 0 on success, -1 on error.
+// Şehir koordinatlarını dosyadan bir diziye okuyan fonksiyon.
+// array: Koordinatların saklanacağı float[2] dizisine işaretçi.
+// 		Her "satırın" tam olarak 2 sütunu olduğu 2D bir dizidir 
+// 		(örn. float coordinates[N][2]). 
+// 		Her float[2] tek bir şehrin [x, y] koordinatlarını temsil eder.
+// file: Okunacak FILE akışına işaretçi.
+// Başarı durumunda 0, hata durumunda -1 döndürür.
 int        retrieve_file(float (*array)[2], FILE *file)
 {
     int tmp;
-	// Loop through the file, reading two floats per line.
+	// Dosya boyunca döngü kur, her satırda iki float oku.
     for (size_t i = 0; (tmp = fscanf(file, "%f, %f\n", array[i] + 0, array[i] + 1)) != EOF; i++)
-        if (tmp != 2) // If fscanf didn't read exactly two floats, it's an error.
+        if (tmp != 2) // Eğer fscanf tam olarak iki float okumadıysa, bu bir hatadır.
         {
             errno = EINVAL;
             return -1;
         }
-	// Check for any other file reading errors (e.g., I/O error).
+	// Diğer dosya okuma hatalarını kontrol et (örn. G/Ç hatası).
     if (ferror(file))
         return -1;
     return 0;
@@ -187,21 +187,21 @@ int        retrieve_file(float (*array)[2], FILE *file)
 
 int        main(int ac, char **av)
 {
-    char *filename = "stdin"; // Default input is standard input.
-    FILE *file = stdin; // Default file pointer is stdin.
-	// If a filename is provided as a command-line argument, open that file.
+    char *filename = "stdin"; // Varsayılan girdi standart girdidir.
+    FILE *file = stdin; // Varsayılan dosya işaretçisi stdin'dir.
+	// Komut satırı argümanı olarak bir dosya adı verilmişse, o dosyayı aç.
     if (ac > 1)
     {
         filename = av[1];
         file = fopen(filename, "r");
     }
-	// Check if the file was opened successfully.
+	// Dosyanın başarıyla açılıp açılmadığını kontrol et.
     if (!file)
     {
         fprintf(stderr, "Error opening %s: %m\n", filename);
         return 1;
     }
-	// Determine the number of cities (lines) in the file.
+	// Dosyadaki şehir (satır) sayısını belirle.
     ssize_t size = file_size(file);
     if (size == -1)
     {
@@ -209,7 +209,7 @@ int        main(int ac, char **av)
         fclose(file);
         return 1;
     }
-	// Allocate memory for the array to store city coordinates.
+	// Şehir koordinatlarını saklamak için diziye bellek ayır.
     float (*array)[2] = calloc(size, sizeof (float [2]));
     if (!array)
     {
@@ -217,7 +217,7 @@ int        main(int ac, char **av)
         fclose(file);
         return 1;
     }
-	// Retrieve city coordinates from the file into the array.
+	// Şehir koordinatlarını dosyadan diziye al.
     if (retrieve_file(array, file) == -1)
     {
         fprintf(stderr, "Error reading %s: %m\n", av[1]);
@@ -225,14 +225,12 @@ int        main(int ac, char **av)
         free(array);
         return 1;
     }
-	// Close the file if it was opened (i.e., not stdin).
+	// Eğer dosya açılmışsa (yani stdin değilse) dosyayı kapat.
     if (ac > 1)
         fclose(file);
 
-    // Calculate and print the shortest path length, formatted to two decimal places.
+    // En kısa yol uzunluğunu hesapla ve iki ondalık basamakla biçimlendirilmiş olarak yazdır.
     printf("%.2f\n", tsp(array,	 size));
     free(array);
     return (0);
 }
-
-

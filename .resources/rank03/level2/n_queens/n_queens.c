@@ -2,27 +2,27 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int *board;         // board[col] = row position of queen in column col
-int board_size;     // size of the board (n)
+int *board;         // board[col] = col sütunundaki vezirin satır konumu
+int board_size;     // tahta boyutu (n)
 
-// Print the current solution
+// Mevcut çözümü yazdır
 void print_solution(void)
 {
     int i;
     
     for (i = 0; i < board_size; i++)
     {
-        // Print row position of queen in column i
+        // i sütunundaki vezirin satır konumunu yazdır
         fprintf(stdout, "%d", board[i]);
         
-        // Add space between numbers, except after the last one
+        // Sayılar arasına boşluk ekle, sonuncu hariç
         if (i < board_size - 1)
             fprintf(stdout, " ");
     }
     fprintf(stdout, "\n");
 }
 
-// replacement abs() function as the original function is not allowed
+// Orijinal abs() fonksiyonu yasak olduğu için kendi abs() fonksiyonumuz
 int ft_abs(int n)
 {
 	if (n < 0)
@@ -30,19 +30,18 @@ int ft_abs(int n)
 	return n;
 }
 
-// Check if placing a queen at (row, col) is safe
+// Veziri (satır, sütun) konumuna yerleştirmenin güvenli olup olmadığını kontrol et
 int is_safe(int row, int col)
 {
-	// Check all previously placed queens (columns 0 to col-1)
-	// i: column iterator
+	// Daha önce yerleştirilmiş tüm vezirleri kontrol et (0'dan sütun-1'e kadar)
+	// i: sütun yineleyici (iterator)
 	for (int i = 0; i < col; i++)
 	{
-		if (board[i] == row) // check if queens are in the same row
+		if (board[i] == row) // vezirlerin aynı satırda olup olmadığını kontrol et
 			return 0;
 		
-		// Check diagonal attacks
-        // If the difference in rows equals difference in columns,
-        // they're on the same diagonal
+		// Çapraz saldırıları kontrol et
+        // Eğer satır farkı sütun farkına eşitse, aynı çapraz üzerindedirler
 		if (ft_abs(board[i] - row) == ft_abs(i - col))
 			return 0;
 	}
@@ -51,48 +50,48 @@ int is_safe(int row, int col)
 
 void solve(int col)
 {
-	// base case check: if we've placed queens in all columns
+	// temel durum kontrolü: eğer tüm sütunlara vezir yerleştirdiysek
 	if (col == board_size)
 	{
 		print_solution();
 		return ;
 	}
-	// Try placing queen in each row of current column
+	// Veziri mevcut sütunun her satırına yerleştirmeyi dene
 	for (int row = 0; row < board_size; row++)
 	{
-		// Try placing queen in each row of current column
+		// Veziri mevcut sütunun her satırına yerleştirmeyi dene
 		if (is_safe(row, col))
 		{
-			// Place queen at this position
+			// Veziri bu konuma yerleştir
 			board[col] = row;
-			// Recursively solve for next column
+			// Bir sonraki sütun için özyinelemeli olarak çöz
 			solve(col + 1);
-			// Backtrack (remove queen) - implicit since we overwrite
-            // board[col] in next iteration or when function returns
+			// Geri İzleme (veziri kaldır) - bir sonraki yinelemede veya fonksiyon döndüğünde 
+            // board[col] üzerine yazdığımız için örtük (implicit) olarak gerçekleşir
 		}
 	}
 }
 
 int main(int ac, char **av)
 {
-	// handle incorrect argc
+	// hatalı argüman sayısını yönet
 	if (ac != 2)
 	{
 		write(1, "\n", 1);
 		return 0;
 	}
 	int n = atoi(av[1]);
-	// handle invalid inputs: negative numbers, unsolvable sizes
+	// geçersiz girdileri yönet: negatif sayılar, çözülemeyen boyutlar
 	if (n <= 3)
 	{
 		write(1, "\n", 1);
 		return 0;
 	}
-	board_size = n; // set global variable
+	board_size = n; // global değişkeni ayarla
 	board = malloc(sizeof(int) * board_size);
 	if (!board)
 		return 1;
-	// Start solving from column 0
+	// Çözmeye 0. sütundan başla
 	solve(0);
 	free(board);
 	return 0;

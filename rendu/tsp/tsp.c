@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <sys/types.h>
 
-// iki nokta arasındaki mesafeyi hesapla
+// compute the distance between two points
 float    distance(float a[2], float b[2])
 {
     return sqrtf((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1]));
@@ -15,7 +15,7 @@ float    distance(float a[2], float b[2])
 float tsp(float (*array)[2], ssize_t size)
 {
     float best_distance;
-    // ... KODUNUZ BURAYA 
+    // ... YOUR CODE HERE 
     return (best_distance);
 }
 
