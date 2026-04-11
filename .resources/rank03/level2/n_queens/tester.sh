@@ -25,12 +25,28 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Test 1: n=2 (should have no solutions as per sub.txt)
+# Test 0: n=1 (should have 1 solution: 0)
+echo "${BLUE}Testing n=1 (1x1 board)...${RESET}"
+./n_queens_test 1 > output0.txt 2>/dev/null
+lines=$(wc -l < output0.txt)
+if [ $lines -ne 1 ]; then
+    echo "$(tput setaf 1)$(tput bold)FAIL: n=1 should have 1 solution, got $lines$(tput sgr 0)"
+    rm -f n_queens_test output*.txt
+    exit 1
+fi
+if [ "$(cat output0.txt)" != "0" ]; then
+    echo "$(tput setaf 1)$(tput bold)FAIL: n=1 should be '0', got '$(cat output0.txt)'$(tput sgr 0)"
+    rm -f n_queens_test output*.txt
+    exit 1
+fi
+
+# Test 1: n=2 (should print a newline as per sub.txt formatting)
 echo "${BLUE}Testing n=2 (sub.txt example)...${RESET}"
 ./n_queens_test 2 > output1.txt 2>/dev/null
-lines=$(grep -v "^$" output1.txt | wc -l)
-if [ $lines -ne 0 ]; then
-    echo "$(tput setaf 1)$(tput bold)FAIL: n=2 should have no solutions, got $lines$(tput sgr 0)"
+# Check if output is exactly one newline character (size 1)
+size=$(wc -c < output1.txt)
+if [ $size -ne 1 ]; then
+    echo "$(tput setaf 1)$(tput bold)FAIL: n=2 should have 1 newline, got size $size$(tput sgr 0)"
     cat output1.txt
     rm -f n_queens_test output*.txt
     exit 1

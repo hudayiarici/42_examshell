@@ -74,24 +74,21 @@ void solve(int col)
 
 int main(int ac, char **av)
 {
-	// hatalı argüman sayısını yönet
 	if (ac != 2)
 	{
 		write(1, "\n", 1);
 		return 0;
 	}
 	int n = atoi(av[1]);
-	// geçersiz girdileri yönet: negatif sayılar, çözülemeyen boyutlar
-	if (n <= 3)
+	if (n <= 0 || n == 2 || n == 3)
 	{
 		write(1, "\n", 1);
 		return 0;
 	}
-	board_size = n; // global değişkeni ayarla
+	board_size = n;
 	board = malloc(sizeof(int) * board_size);
 	if (!board)
 		return 1;
-	// Çözmeye 0. sütundan başla
 	solve(0);
 	free(board);
 	return 0;
